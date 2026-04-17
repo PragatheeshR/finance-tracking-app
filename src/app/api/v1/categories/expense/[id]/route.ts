@@ -9,7 +9,7 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const userId = request.headers.get('x-user-id')
@@ -18,6 +18,7 @@ export async function PUT(
       return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
     }
 
+    const { id } = await params
     const body = await request.json()
 
     // Validate input
@@ -25,7 +26,7 @@ export async function PUT(
 
     // Verify ownership
     const existing = await prisma.expenseCategory.findFirst({
-      where: { id: params.id, userId },
+      where: { id, userId },
     })
 
     if (!existing) {
@@ -34,7 +35,7 @@ export async function PUT(
 
     // Update category
     const category = await prisma.expenseCategory.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(validatedData.name && { name: validatedData.name }),
         ...(validatedData.icon !== undefined && { icon: validatedData.icon }),
@@ -55,7 +56,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const userId = request.headers.get('x-user-id')
@@ -64,9 +65,11 @@ export async function DELETE(
       return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
     }
 
+    const { id } = await params
+
     // Verify ownership
     const existing = await prisma.expenseCategory.findFirst({
-      where: { id: params.id, userId },
+      where: { id, userId },
     })
 
     if (!existing) {
@@ -87,7 +90,7 @@ export async function DELETE(
     }
 
     // Delete category
-    await prisma.expenseCategory.delete({ where: { id: params.id } })
+    await prisma.expenseCategory.delete({ where: { id } })
 
     return successResponse(null, 'Category deleted successfully')
   } catch (error) {

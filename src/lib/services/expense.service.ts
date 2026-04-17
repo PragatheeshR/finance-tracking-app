@@ -163,17 +163,20 @@ export class ExpenseService {
       throw new Error('Expense not found')
     }
 
+    const updateData: any = {}
+
+    if (data.date) updateData.date = new Date(data.date)
+    if (data.bucketType) updateData.bucketType = data.bucketType
+    if (data.category) updateData.category = data.category
+    if (data.description) updateData.description = data.description
+    if (data.amount !== undefined) updateData.amount = numberToDecimal(data.amount)
+    if (data.tags !== undefined) updateData.tags = data.tags
+    if (data.receiptUrl !== undefined) updateData.receiptUrl = data.receiptUrl
+    if (data.isRecurring !== undefined) updateData.isRecurring = data.isRecurring
+
     const updated = await prisma.expense.update({
       where: { id: expenseId },
-      data: {
-        ...(data.date && { date: new Date(data.date) }),
-        ...(data.bucketType && { bucketType: data.bucketType }),
-        ...(data.category && { category: data.category }),
-        ...(data.description && { description: data.description }),
-        ...(data.amount !== undefined && { amount: numberToDecimal(data.amount) }),
-        ...(data.tags !== undefined && { tags: data.tags }),
-        ...(data.receiptUrl !== undefined && { receiptUrl: data.receiptUrl }),
-      },
+      data: updateData,
     })
 
     return updated

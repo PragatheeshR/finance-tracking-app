@@ -27,9 +27,12 @@ export interface HoldingWithCategory {
 
 export interface PortfolioSummary {
   totalNetworth: number
+  totalCurrent: number
   totalInvested: number
   totalProfitLoss: number
   profitLossPercentage: number
+  totalReturnPercentage: number
+  totalHoldings: number
   isEmpty: boolean
   allocationByCategory: AllocationComparison[]
 }

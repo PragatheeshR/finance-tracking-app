@@ -1,22 +1,27 @@
 import { NextRequest } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { errorResponse } from './utils/api-response'
 
 /**
- * Get user ID from request header
- * TODO: Replace with NextAuth session once stable
+ * Get user ID from NextAuth session with fallback to header
  */
 export async function getUserIdFromRequest(request: NextRequest): Promise<string | null> {
-  // Get from header for now
+  // Try to get from session first
+  try {
+    const session = await getServerSession(authOptions)
+    if (session?.user?.id) {
+      return session.user.id
+    }
+  } catch (error) {
+    console.error('Error getting user from session:', error)
+  }
+
+  // Fallback to header for backward compatibility
   const headerUserId = request.headers.get('x-user-id')
   if (headerUserId) {
     return headerUserId
   }
-
-  // TODO: Add session-based auth when NextAuth v5 is stable
-  // const session = await auth()
-  // if (session?.user?.id) {
-  //   return session.user.id
-  // }
 
   return null
 }
@@ -29,7 +34,7 @@ export async function requireAuthFromRequest(request: NextRequest) {
 
   if (!userId) {
     return {
-      error: errorResponse('Authentication required. Please provide x-user-id header.', 'UNAUTHORIZED', 401),
+      error: errorResponse('Authentication required. Please login.', 'UNAUTHORIZED', 401),
       userId: null,
     }
   }

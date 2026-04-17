@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { expenseService } from '@/lib/services/expense.service'
 import { createExpenseSchema, expenseQuerySchema } from '@/lib/validations/expense.schema'
 import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-response'
+import { requireAuthFromRequest } from '@/lib/auth-request'
 
 /**
  * GET /api/v1/expenses
@@ -9,11 +10,9 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-
  */
 export async function GET(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id')
-
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams
@@ -34,11 +33,11 @@ export async function GET(request: NextRequest) {
     expenseQuerySchema.parse(filters)
 
     // Get expenses
-    const result = await expenseService.getExpenses(userId, filters)
+    const result = await expenseService.getExpenses(userId!, filters)
 
     // Get summary
     const summary = await expenseService.getExpenseSummary(
-      userId,
+      userId!,
       filters.startDate,
       filters.endDate
     )
@@ -67,11 +66,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id')
-
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
     const body = await request.json()
 
@@ -79,7 +76,7 @@ export async function POST(request: NextRequest) {
     const validatedData = createExpenseSchema.parse(body)
 
     // Create expense
-    const expense = await expenseService.addExpense(userId, validatedData)
+    const expense = await expenseService.addExpense(userId!, validatedData)
 
     return successResponse(
       { expense },

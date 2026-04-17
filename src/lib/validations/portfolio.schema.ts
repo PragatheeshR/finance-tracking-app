@@ -4,13 +4,13 @@ import { z } from 'zod'
 export const createHoldingSchema = z.object({
   categoryId: z.string().cuid('Invalid category ID'),
   name: z.string().min(1, 'Name is required').max(255),
-  symbol: z.string().optional(),
-  subCategory: z.string().optional(),
+  symbol: z.string().nullable().optional(),
+  subCategory: z.string().nullable().optional(),
   units: z.number().positive('Units must be positive'),
   unitPrice: z.number().positive('Unit price must be positive'),
   investedAmount: z.number().positive('Invested amount must be positive'),
-  purchaseDate: z.string().datetime().optional(),
-  remarks: z.string().optional(),
+  purchaseDate: z.string().datetime().nullable().optional(),
+  remarks: z.string().nullable().optional(),
   autoFetchPrice: z.boolean().optional().default(false),
 })
 

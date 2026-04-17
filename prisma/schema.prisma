@@ -15,14 +15,16 @@ datasource db {
 // ============================================================================
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  emailVerified DateTime?
-  passwordHash  String?
-  name          String?
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  email          String    @unique
+  emailVerified  DateTime?
+  passwordHash   String?
+  name           String?
+  image          String?
+  monthlyIncome  Decimal?  @db.Decimal(15, 2)
+  occupation     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   // Relations
   accounts          Account[]
@@ -36,6 +38,9 @@ model User {
   insurancePolicies InsurancePolicy[]
   userSettings      UserSettings?
   recurringExpenses RecurringExpense[]
+  income            Income[]
+  recurringIncome   RecurringIncome[]
+  goals             Goal[]
 
   @@map("users")
 }
@@ -220,16 +225,17 @@ model Snapshot {
 // ============================================================================
 
 model ExpenseCategory {
-  id        String   @id @default(cuid())
-  userId    String
-  name      String
-  isDefault Boolean  @default(false)
-  isActive  Boolean  @default(true)
-  icon      String?
-  color     String?
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  displayName String
+  isDefault   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  icon        String?
+  color       String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -292,6 +298,63 @@ model RecurringExpense {
 }
 
 // ============================================================================
+// Income
+// ============================================================================
+
+model Income {
+  id          String       @id @default(cuid())
+  userId      String
+  date        DateTime
+  source      IncomeSource
+  category    String
+  description String
+  amount      Decimal      @db.Decimal(15, 2)
+  tags        String[]     @default([])
+  isRecurring Boolean      @default(false)
+  recurringId String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([userId, source])
+  @@index([userId, category])
+  @@map("income")
+}
+
+enum IncomeSource {
+  SALARY
+  BUSINESS
+  INVESTMENT
+  FREELANCE
+  RENTAL
+  GIFT
+  OTHER
+}
+
+model RecurringIncome {
+  id            String       @id @default(cuid())
+  userId        String
+  source        IncomeSource
+  category      String
+  description   String
+  amount        Decimal      @db.Decimal(15, 2)
+  frequency     String
+  startDate     DateTime
+  endDate       DateTime?
+  isActive      Boolean      @default(true)
+  lastGenerated DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
+  @@map("recurring_income")
+}
+
+// ============================================================================
 // Budget
 // ============================================================================
 
@@ -347,6 +410,62 @@ enum PolicyType {
   CAR
   BIKE
   OTHER
+}
+
+// ============================================================================
+// Goals & Savings
+// ============================================================================
+
+model Goal {
+  id            String     @id @default(cuid())
+  userId        String
+  name          String
+  description   String?    @db.Text
+  category      GoalCategory
+  targetAmount  Decimal    @db.Decimal(15, 2)
+  currentAmount Decimal    @default(0) @db.Decimal(15, 2)
+  deadline      DateTime?
+  priority      GoalPriority @default(MEDIUM)
+  status        GoalStatus @default(IN_PROGRESS)
+  monthlyTarget Decimal?   @db.Decimal(15, 2)
+  icon          String?
+  color         String?
+  isActive      Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([userId, category])
+  @@map("goals")
+}
+
+enum GoalCategory {
+  EMERGENCY_FUND
+  VACATION
+  HOUSE
+  CAR
+  EDUCATION
+  RETIREMENT
+  WEDDING
+  INVESTMENT
+  DEBT_PAYOFF
+  OTHER
+}
+
+enum GoalPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum GoalStatus {
+  IN_PROGRESS
+  COMPLETED
+  PAUSED
+  CANCELLED
 }
 
 // ============================================================================

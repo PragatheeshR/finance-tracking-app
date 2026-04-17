@@ -26,9 +26,12 @@ export class PortfolioService {
     if (holdings.length === 0) {
       return {
         totalNetworth: 0,
+        totalCurrent: 0,
         totalInvested: 0,
         totalProfitLoss: 0,
         profitLossPercentage: 0,
+        totalReturnPercentage: 0,
+        totalHoldings: 0,
         isEmpty: true,
         allocationByCategory: [],
       }
@@ -65,9 +68,12 @@ export class PortfolioService {
 
     return {
       totalNetworth,
+      totalCurrent: totalNetworth,
       totalInvested,
       totalProfitLoss,
       profitLossPercentage,
+      totalReturnPercentage: profitLossPercentage,
+      totalHoldings: holdings.length,
       isEmpty: false,
       allocationByCategory,
     }

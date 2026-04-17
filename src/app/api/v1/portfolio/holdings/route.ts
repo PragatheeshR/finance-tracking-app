@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { portfolioService } from '@/lib/services/portfolio.service'
 import { createHoldingSchema, updateHoldingSchema } from '@/lib/validations/portfolio.schema'
 import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-response'
+import { requireAuthFromRequest } from '@/lib/auth-request'
 
 /**
  * GET /api/v1/portfolio/holdings
@@ -9,13 +10,11 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-
  */
 export async function GET(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id')
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
-
-    const holdings = await portfolioService.getHoldings(userId)
+    const holdings = await portfolioService.getHoldings(userId!)
 
     return successResponse(
       { holdings, total: holdings.length },
@@ -32,11 +31,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id')
-
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
     const body = await request.json()
 
@@ -44,7 +41,7 @@ export async function POST(request: NextRequest) {
     const validatedData = createHoldingSchema.parse(body)
 
     // Create holding
-    const holding = await portfolioService.addHolding(userId, validatedData)
+    const holding = await portfolioService.addHolding(userId!, validatedData)
 
     return successResponse(
       { holding },

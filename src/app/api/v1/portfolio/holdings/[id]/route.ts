@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { portfolioService } from '@/lib/services/portfolio.service'
 import { updateHoldingSchema } from '@/lib/validations/portfolio.schema'
 import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-response'
+import { requireAuthFromRequest } from '@/lib/auth-request'
 
 /**
  * GET /api/v1/portfolio/holdings/[id]
@@ -9,17 +10,16 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = request.headers.get('x-user-id')
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
-
-    const holdings = await portfolioService.getHoldings(userId)
-    const holding = holdings.find(h => h.id === params.id)
+    const { id } = await params
+    const holdings = await portfolioService.getHoldings(userId!)
+    const holding = holdings.find(h => h.id === id)
 
     if (!holding) {
       return errorResponse('Holding not found', 'NOT_FOUND', 404)
@@ -37,15 +37,14 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = request.headers.get('x-user-id')
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
-
+    const { id } = await params
     const body = await request.json()
 
     // Validate input
@@ -53,8 +52,8 @@ export async function PUT(
 
     // Update holding
     const holding = await portfolioService.updateHolding(
-      userId,
-      params.id,
+      userId!,
+      id,
       validatedData
     )
 
@@ -73,16 +72,16 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = request.headers.get('x-user-id')
+    // Require authentication
+    const { error, userId } = await requireAuthFromRequest(request)
+    if (error) return error
 
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
-    }
+    const { id } = await params
 
-    await portfolioService.deleteHolding(userId, params.id)
+    await portfolioService.deleteHolding(userId!, id)
 
     return successResponse(null, 'Holding deleted successfully')
   } catch (error) {

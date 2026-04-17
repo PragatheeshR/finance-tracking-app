@@ -9,7 +9,7 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const userId = request.headers.get('x-user-id')
@@ -18,6 +18,7 @@ export async function PUT(
       return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
     }
 
+    const { id } = await params
     const body = await request.json()
 
     // Validate input
@@ -26,7 +27,7 @@ export async function PUT(
     // Update expense
     const expense = await expenseService.updateExpense(
       userId,
-      params.id,
+      id,
       validatedData
     )
 
@@ -45,7 +46,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const userId = request.headers.get('x-user-id')
@@ -54,7 +55,9 @@ export async function DELETE(
       return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
     }
 
-    await expenseService.deleteExpense(userId, params.id)
+    const { id } = await params
+
+    await expenseService.deleteExpense(userId, id)
 
     return successResponse(null, 'Expense deleted successfully')
   } catch (error) {
