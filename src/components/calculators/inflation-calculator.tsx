@@ -237,7 +237,7 @@ export function InflationCalculator() {
                 label={{ value: 'Value (₹)', angle: -90, position: 'insideLeft' }}
                 tickFormatter={(value) => `₹${(value / 100000).toFixed(0)}L`}
               />
-              <Tooltip formatter={(value: number) => `₹${value.toLocaleString('en-IN')}`} />
+              <Tooltip formatter={(value: any) => `₹${value.toLocaleString('en-IN')}`} />
               <Legend />
               <Line
                 type="monotone"

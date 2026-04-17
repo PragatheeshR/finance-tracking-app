@@ -440,7 +440,7 @@ export function IncomeTaxCalculator() {
             </div>
             <div>
               <Label htmlFor="age">Age Category</Label>
-              <Select value={age} onValueChange={setAge}>
+              <Select value={age} onValueChange={(value) => setAge(value || 'below60')}>
                 <SelectTrigger id="age" className="mt-1">
                   <SelectValue />
                 </SelectTrigger>
@@ -728,7 +728,7 @@ export function IncomeTaxCalculator() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} fontSize={12} />
                 <YAxis />
-                <Tooltip formatter={(value: number) => `₹${value.toLocaleString('en-IN')}`} />
+                <Tooltip formatter={(value: any) => `₹${value.toLocaleString('en-IN')}`} />
                 <Legend />
                 <Bar dataKey="old" fill="#3b82f6" name="Old Regime" />
                 <Bar dataKey="new" fill="#10b981" name="New Regime" />
@@ -749,7 +749,7 @@ export function IncomeTaxCalculator() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                  label={({ name, percent }: any) => `${name}: ${((percent || 0) * 100).toFixed(1)}%`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -758,7 +758,7 @@ export function IncomeTaxCalculator() {
                     <Cell key={`cell-${index}`} fill={COLORS[index]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => `₹${value.toLocaleString('en-IN')}`} />
+                <Tooltip formatter={(value: any) => `₹${value.toLocaleString('en-IN')}`} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>

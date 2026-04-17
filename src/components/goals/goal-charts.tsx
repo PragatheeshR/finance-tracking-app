@@ -127,12 +127,12 @@ export function GoalCharts({ goals, summary }: GoalChartsProps) {
   // Radar chart data - Goal health metrics
   const radarData = goals.slice(0, 5).map((goal) => {
     const progress = (Number(goal.currentAmount) / Number(goal.targetAmount)) * 100
-    const priorityScore = {
+    const priorityScore = ({
       CRITICAL: 100,
       HIGH: 75,
       MEDIUM: 50,
       LOW: 25,
-    }[goal.priority] || 0
+    } as any)[goal.priority] || 0
 
     const timeScore = goal.deadline
       ? Math.max(
@@ -167,8 +167,8 @@ export function GoalCharts({ goals, summary }: GoalChartsProps) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) =>
-                  `${name}: ${(percent * 100).toFixed(0)}%`
+                label={({ name, percent }: any) =>
+                  `${name}: ${((percent || 0) * 100).toFixed(0)}%`
                 }
                 outerRadius={80}
                 fill="#8884d8"
@@ -205,7 +205,7 @@ export function GoalCharts({ goals, summary }: GoalChartsProps) {
               <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
               <YAxis />
               <Tooltip
-                formatter={(value: number) => `₹${value.toLocaleString('en-IN')}`}
+                formatter={((value: any) => `₹${Number(value).toLocaleString('en-IN')}`) as any}
               />
               <Legend />
               <Bar dataKey="target" fill="#3b82f6" name="Target" />
@@ -227,10 +227,10 @@ export function GoalCharts({ goals, summary }: GoalChartsProps) {
               <XAxis type="number" domain={[0, 100]} />
               <YAxis dataKey="name" type="category" width={150} />
               <Tooltip
-                formatter={(value: number, name: string) => {
-                  if (name === 'progress') return `${value.toFixed(1)}%`
-                  return `₹${value.toLocaleString('en-IN')}`
-                }}
+                formatter={((value: any, name: string) => {
+                  if (name === 'progress') return `${Number(value).toFixed(1)}%`
+                  return `₹${Number(value).toLocaleString('en-IN')}`
+                }) as any}
               />
               <Bar dataKey="progress" fill="#10b981" name="Progress %" />
             </BarChart>
@@ -269,8 +269,8 @@ export function GoalCharts({ goals, summary }: GoalChartsProps) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ status, percent }) =>
-                  `${status}: ${(percent * 100).toFixed(0)}%`
+                label={({ status, percent }: any) =>
+                  `${status}: ${((percent || 0) * 100).toFixed(0)}%`
                 }
                 outerRadius={80}
                 fill="#8884d8"

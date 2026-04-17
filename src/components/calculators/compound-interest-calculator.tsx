@@ -98,7 +98,7 @@ export function CompoundInterestCalculator() {
             </div>
             <div>
               <Label>Compounding Frequency</Label>
-              <Select value={frequency} onValueChange={setFrequency}>
+              <Select value={frequency} onValueChange={(value) => setFrequency(value || '1')}>
                 <SelectTrigger className="mt-1">
                   <SelectValue />
                 </SelectTrigger>
@@ -143,7 +143,7 @@ export function CompoundInterestCalculator() {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" label={{ value: 'Years', position: 'insideBottom', offset: -5 }} />
               <YAxis tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} />
-              <Tooltip formatter={(value: number) => `₹${value.toLocaleString('en-IN')}`} />
+              <Tooltip formatter={(value: any) => `₹${Number(value).toLocaleString('en-IN')}`} />
               <Legend />
               <Area type="monotone" dataKey="principal" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Principal" />
               <Area type="monotone" dataKey="interest" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.8} name="Interest" />

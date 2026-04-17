@@ -31,15 +31,17 @@ export default function LandingPage() {
             Take control of your finances. Track expenses, manage investments, and achieve your financial goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild className="text-lg">
-              <Link href="/register">
+            <Link href="/register">
+              <Button size="lg" className="text-lg w-full sm:w-auto">
                 Get Started Free
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild className="text-lg">
-              <Link href="/login">Sign In</Link>
-            </Button>
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button size="lg" variant="outline" className="text-lg w-full sm:w-auto">
+                Sign In
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -126,12 +128,12 @@ export default function LandingPage() {
           <p className="text-xl mb-8 text-blue-100">
             Join thousands of users who are already taking control of their finances
           </p>
-          <Button size="lg" variant="secondary" asChild className="text-lg">
-            <Link href="/register">
+          <Link href="/register">
+            <Button size="lg" variant="secondary" className="text-lg">
               Create Free Account
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
 

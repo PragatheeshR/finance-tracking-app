@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
       data: {
         userId,
         name: validatedData.name,
+        displayName: validatedData.name,
         icon: validatedData.icon,
         color: validatedData.color,
         isDefault: false,

@@ -95,7 +95,7 @@ export function PortfolioFilters({ categories, onFilterChange }: PortfolioFilter
             <Label htmlFor="category">Category</Label>
             <Select
               value={filters.category}
-              onValueChange={(value) => updateFilters({ category: value })}
+              onValueChange={(value) => updateFilters({ category: value || undefined })}
             >
               <SelectTrigger id="category" className="mt-1">
                 <SelectValue />

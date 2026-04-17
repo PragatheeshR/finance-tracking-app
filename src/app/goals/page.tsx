@@ -171,7 +171,7 @@ export default function GoalsPage() {
       'Monthly Target',
     ]
 
-    const rows = goals.map((goal) => [
+    const rows = goals.map((goal: any) => [
       goal.name,
       goal.category,
       goal.priority,
@@ -185,7 +185,7 @@ export default function GoalsPage() {
 
     const csvContent = [
       headers.join(','),
-      ...rows.map((row) => row.join(','))
+      ...rows.map((row: any) => row.join(','))
     ].join('\n')
 
     const blob = new Blob([csvContent], { type: 'text/csv' })
@@ -280,7 +280,7 @@ export default function GoalsPage() {
                 </div>
               </div>
 
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value || 'all')}>
                 <SelectTrigger>
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
@@ -293,7 +293,7 @@ export default function GoalsPage() {
                 </SelectContent>
               </Select>
 
-              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <Select value={categoryFilter} onValueChange={(value) => setCategoryFilter(value || 'all')}>
                 <SelectTrigger>
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
@@ -312,7 +312,7 @@ export default function GoalsPage() {
                 </SelectContent>
               </Select>
 
-              <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+              <Select value={priorityFilter} onValueChange={(value) => setPriorityFilter(value || 'all')}>
                 <SelectTrigger>
                   <SelectValue placeholder="Priority" />
                 </SelectTrigger>
@@ -325,7 +325,7 @@ export default function GoalsPage() {
                 </SelectContent>
               </Select>
 
-              <Select value={sortBy} onValueChange={setSortBy}>
+              <Select value={sortBy} onValueChange={(value) => setSortBy(value || 'priority')}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>

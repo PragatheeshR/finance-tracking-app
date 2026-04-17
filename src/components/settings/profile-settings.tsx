@@ -97,7 +97,6 @@ export function ProfileSettings() {
           id="name"
           placeholder="John Doe"
           {...register('name')}
-          error={errors.name?.message}
         />
         {errors.name && (
           <p className="text-sm text-destructive">{errors.name.message}</p>
@@ -112,7 +111,6 @@ export function ProfileSettings() {
           type="email"
           placeholder="john@example.com"
           {...register('email')}
-          error={errors.email?.message}
         />
         {errors.email && (
           <p className="text-sm text-destructive">{errors.email.message}</p>

@@ -126,8 +126,7 @@ export function BudgetCard({ budget, onEdit }: BudgetCardProps) {
               </div>
               <Progress
                 value={Math.min(budget.percentUsed, 100)}
-                className="h-2"
-                indicatorClassName={getProgressColor(budget.percentUsed)}
+                className={`h-2 ${getProgressColor(budget.percentUsed)}`}
               />
             </div>
           </div>

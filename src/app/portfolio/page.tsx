@@ -168,9 +168,9 @@ export default function PortfolioPage() {
   const metrics = useMemo(() => {
     if (!summary || !Array.isArray(holdings)) return null
 
-    const totalValue = summary.totalCurrent
-    const totalInvested = summary.totalInvested
-    const avgReturn = summary.totalReturnPercentage
+    const totalValue = (summary as any).totalCurrent
+    const totalInvested = (summary as any).totalInvested
+    const avgReturn = (summary as any).totalReturnPercentage
 
     // Calculate XIRR approximation (simplified)
     // In a real app, you'd calculate actual XIRR with transaction dates
@@ -178,7 +178,7 @@ export default function PortfolioPage() {
     const cagr = totalInvested > 0 ? ((Math.pow(totalValue / totalInvested, 1 / years) - 1) * 100).toFixed(2) : '0.00'
 
     return {
-      ...summary,
+      ...(summary as any),
       cagr: parseFloat(cagr),
       avgAllocation: holdings.length > 0 ? (100 / holdings.length).toFixed(1) : '0',
     }

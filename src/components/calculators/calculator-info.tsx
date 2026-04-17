@@ -38,7 +38,7 @@ export function CalculatorInfo({
 }: CalculatorInfoProps) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button variant="outline" size="sm" className="gap-2">
           <Info className="h-4 w-4" />
           How to Use

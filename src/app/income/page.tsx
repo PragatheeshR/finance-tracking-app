@@ -300,7 +300,7 @@ export default function IncomePage() {
               <Select
                 value={filters.source}
                 onValueChange={(value) =>
-                  setFilters({ ...filters, source: value })
+                  setFilters({ ...filters, source: value || 'All' })
                 }
               >
                 <SelectTrigger>

@@ -37,7 +37,7 @@ export function CategoryManagement() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [categoryToDelete, setCategoryToDelete] = useState<any>(null)
 
-  const categories = categoriesData?.categories || []
+  const categories = (categoriesData as any)?.categories || []
 
   const handleEdit = (category: any) => {
     setEditingCategory(category)

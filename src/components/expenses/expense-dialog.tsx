@@ -35,8 +35,8 @@ import { Loader2 } from 'lucide-react'
 
 const expenseSchema = z.object({
   date: z.string().min(1, 'Date is required'),
-  bucketType: z.enum(['FIXED', 'VARIABLE', 'IRREGULAR'], {
-    required_error: 'Bucket type is required',
+  bucketType: z.enum(['FIXED', 'VARIABLE', 'IRREGULAR']).refine((val) => !!val, {
+    message: 'Bucket type is required',
   }),
   category: z.string().min(1, 'Category is required'),
   description: z.string().min(1, 'Description is required').max(500),
@@ -60,12 +60,12 @@ export function ExpenseDialog({
 }: ExpenseDialogProps) {
   const isEditMode = !!expense
   const { data: categoriesData, isLoading: categoriesLoading } = useExpenseCategories()
-  const categories = categoriesData?.categories || []
+  const categories = (categoriesData as any)?.categories || []
   const addExpense = useAddExpense()
   const updateExpense = useUpdateExpense()
 
   const form = useForm<ExpenseFormData>({
-    resolver: zodResolver(expenseSchema),
+    resolver: zodResolver(expenseSchema) as any,
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
       bucketType: 'VARIABLE',

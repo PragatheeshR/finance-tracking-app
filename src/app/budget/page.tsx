@@ -105,7 +105,7 @@ export default function BudgetPage() {
                 <label className="text-sm font-medium mb-2 block">Month</label>
                 <Select
                   value={selectedMonth.toString()}
-                  onValueChange={(value) => setSelectedMonth(parseInt(value))}
+                  onValueChange={(value) => setSelectedMonth(parseInt(value || '1'))}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -123,7 +123,7 @@ export default function BudgetPage() {
                 <label className="text-sm font-medium mb-2 block">Year</label>
                 <Select
                   value={selectedYear.toString()}
-                  onValueChange={(value) => setSelectedYear(parseInt(value))}
+                  onValueChange={(value) => setSelectedYear(parseInt(value || new Date().getFullYear().toString()))}
                 >
                   <SelectTrigger>
                     <SelectValue />

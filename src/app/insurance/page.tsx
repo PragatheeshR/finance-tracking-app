@@ -379,7 +379,7 @@ export default function InsurancePage() {
                   </div>
 
                   {/* Policy Type Filter */}
-                  <Select value={filterType} onValueChange={setFilterType}>
+                  <Select value={filterType} onValueChange={(value) => setFilterType(value || 'ALL')}>
                     <SelectTrigger>
                       <SelectValue placeholder="Policy Type" />
                     </SelectTrigger>

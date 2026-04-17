@@ -43,7 +43,7 @@ export function StockSymbolCombobox({
   const [searchQuery, setSearchQuery] = React.useState('')
   const [results, setResults] = React.useState<StockSearchResult[]>([])
   const [isSearching, setIsSearching] = React.useState(false)
-  const searchTimeoutRef = React.useRef<NodeJS.Timeout>()
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
 
   // Debounced search
   React.useEffect(() => {
@@ -92,7 +92,7 @@ export function StockSymbolCombobox({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button
           variant="outline"
           role="combobox"

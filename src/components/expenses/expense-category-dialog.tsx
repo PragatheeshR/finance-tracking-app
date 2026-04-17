@@ -37,8 +37,8 @@ import { Loader2 } from 'lucide-react'
 const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required').max(50),
   displayName: z.string().min(1, 'Display name is required').max(100),
-  categoryType: z.enum(['EXPENSE', 'INCOME'], {
-    required_error: 'Category type is required',
+  categoryType: z.enum(['EXPENSE', 'INCOME']).refine((val) => !!val, {
+    message: 'Category type is required',
   }),
   isActive: z.boolean().optional().default(true),
 })
@@ -61,7 +61,7 @@ export function ExpenseCategoryDialog({
   const updateCategory = useUpdateExpenseCategory()
 
   const form = useForm<CategoryFormData>({
-    resolver: zodResolver(categorySchema),
+    resolver: zodResolver(categorySchema) as any,
     defaultValues: {
       name: '',
       displayName: '',

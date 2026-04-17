@@ -59,7 +59,7 @@ export function BudgetDialog({
 }: BudgetDialogProps) {
   const isEditMode = !!budget
   const { data: categoriesData, isLoading: categoriesLoading } = useExpenseCategories()
-  const categories = categoriesData?.categories || []
+  const categories = (categoriesData as any)?.categories || []
   const createBudget = useCreateBudget()
   const updateBudget = useUpdateBudget()
 

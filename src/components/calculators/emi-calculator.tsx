@@ -135,7 +135,7 @@ export function EMICalculator() {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
               <YAxis tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} />
-              <Tooltip formatter={(value: number) => `₹${(value / 100000).toFixed(2)}L`} />
+              <Tooltip formatter={(value: any) => `₹${(Number(value) / 100000).toFixed(2)}L`} />
               <Legend />
               <Bar dataKey="principal" stackId="a" fill="#10b981" name="Principal" />
               <Bar dataKey="interest" stackId="a" fill="#ef4444" name="Interest" />

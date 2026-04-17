@@ -400,7 +400,7 @@ export function FIRECalculator() {
                 tickFormatter={(value) => `₹${(value / 10000000).toFixed(1)}Cr`}
               />
               <Tooltip
-                formatter={(value: number) => `₹${(value / 10000000).toFixed(2)}Cr`}
+                formatter={(value: any) => `₹${(value / 10000000).toFixed(2)}Cr`}
               />
               <Legend />
               <Area
@@ -442,7 +442,7 @@ export function FIRECalculator() {
                 tickFormatter={(value) => `₹${(value / 10000000).toFixed(1)}Cr`}
               />
               <Tooltip
-                formatter={(value: number) => `₹${(value / 10000000).toFixed(2)}Cr`}
+                formatter={(value: any) => `₹${(value / 10000000).toFixed(2)}Cr`}
               />
               <Legend />
               <Line

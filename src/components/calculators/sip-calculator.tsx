@@ -123,7 +123,7 @@ export function SIPCalculator() {
                   <Cell fill="#3b82f6" />
                   <Cell fill="#10b981" />
                 </Pie>
-                <Tooltip formatter={(value: number) => `₹${(value / 100000).toFixed(2)}L`} />
+                <Tooltip formatter={(value: any) => `₹${(value / 100000).toFixed(2)}L`} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -137,7 +137,7 @@ export function SIPCalculator() {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
               <YAxis tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} />
-              <Tooltip formatter={(value: number) => `₹${(value / 100000).toFixed(2)}L`} />
+              <Tooltip formatter={(value: any) => `₹${(value / 100000).toFixed(2)}L`} />
               <Legend />
               <Area type="monotone" dataKey="invested" stackId="1" stroke="#3b82f6" fill="#3b82f6" name="Invested" />
               <Area type="monotone" dataKey="returns" stackId="1" stroke="#10b981" fill="#10b981" name="Returns" />

@@ -179,7 +179,7 @@ export class BudgetService {
     if (data.monthlyAmount !== undefined) updateData.monthlyAmount = numberToDecimal(data.monthlyAmount)
     if (data.year !== undefined) updateData.year = data.year
     if (data.month !== undefined) updateData.month = data.month
-    if (data.isActive !== undefined) updateData.isActive = data.isActive
+    if ((data as any).isActive !== undefined) updateData.isActive = (data as any).isActive
 
     const updated = await prisma.budgetItem.update({
       where: { id: budgetId },

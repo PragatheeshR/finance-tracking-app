@@ -100,7 +100,7 @@ export function PreferencesSettings() {
         <Label>Default Currency</Label>
         <Select
           value={watch('currency')}
-          onValueChange={(value) => setValue('currency', value)}
+          onValueChange={(value) => setValue('currency', value || 'INR')}
         >
           <SelectTrigger>
             <SelectValue />
@@ -125,7 +125,7 @@ export function PreferencesSettings() {
         <Label>Date Format</Label>
         <Select
           value={watch('dateFormat')}
-          onValueChange={(value) => setValue('dateFormat', value)}
+          onValueChange={(value) => setValue('dateFormat', value || 'DD/MM/YYYY')}
         >
           <SelectTrigger>
             <SelectValue />

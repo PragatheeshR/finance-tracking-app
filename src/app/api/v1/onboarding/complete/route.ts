@@ -34,14 +34,12 @@ export async function POST(request: NextRequest) {
       update: {
         currency: currency || 'INR',
         timezone: timezone || 'Asia/Kolkata',
-        budgetCycle: budgetCycle || 'MONTHLY',
         onboardingComplete: true,
       },
       create: {
         userId: session.user.id,
         currency: currency || 'INR',
         timezone: timezone || 'Asia/Kolkata',
-        budgetCycle: budgetCycle || 'MONTHLY',
         onboardingComplete: true,
       },
     })

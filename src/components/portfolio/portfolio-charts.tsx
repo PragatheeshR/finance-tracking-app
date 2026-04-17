@@ -123,7 +123,7 @@ export function PortfolioCharts({ holdings }: PortfolioChartsProps) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                label={({ name, percent }: any) => `${name}: ${((percent || 0) * 100).toFixed(1)}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -133,7 +133,7 @@ export function PortfolioCharts({ holdings }: PortfolioChartsProps) {
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number) => `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`}
+                formatter={((value: any) => `₹${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`) as any}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -152,7 +152,7 @@ export function PortfolioCharts({ holdings }: PortfolioChartsProps) {
               <XAxis type="number" tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
               <YAxis type="category" dataKey="name" width={100} />
               <Tooltip
-                formatter={(value: number) => `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`}
+                formatter={((value: any) => `₹${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`) as any}
               />
               <Bar dataKey="value" fill="#8884d8">
                 {gainerLoserData.map((entry, index) => (
@@ -177,10 +177,10 @@ export function PortfolioCharts({ holdings }: PortfolioChartsProps) {
               <YAxis yAxisId="left" tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} />
               <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v.toFixed(0)}%`} />
               <Tooltip
-                formatter={(value: number, name: string) => {
-                  if (name === 'returnPct') return `${value.toFixed(2)}%`
-                  return `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
-                }}
+                formatter={((value: any, name: string) => {
+                  if (name === 'returnPct') return `${Number(value).toFixed(2)}%`
+                  return `₹${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
+                }) as any}
               />
               <Legend />
               <Bar yAxisId="left" dataKey="invested" fill="#3b82f6" name="Invested" />

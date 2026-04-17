@@ -188,22 +188,21 @@ export function PolicyDetailDialog({
                   <FileText className="h-5 w-5" />
                   Policy Document
                 </h3>
-                <Button
-                  variant="outline"
+                <a
+                  href={policy.documentUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full"
-                  asChild
                 >
-                  <a
-                    href={policy.documentUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2"
+                  <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center gap-2"
                   >
                     <FileText className="h-4 w-4" />
                     View Policy Document
                     <ExternalLink className="h-3 w-3" />
-                  </a>
-                </Button>
+                  </Button>
+                </a>
               </div>
               <Separator />
             </>

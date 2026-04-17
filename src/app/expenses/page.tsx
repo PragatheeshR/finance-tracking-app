@@ -65,8 +65,8 @@ export default function ExpensesPage() {
 
   const { data, isLoading, error } = useExpenses(apiParams)
 
-  const expenses = data?.expenses || []
-  const summary = data?.summary
+  const expenses = (data as any)?.expenses || []
+  const summary = (data as any)?.summary
 
   return (
     <DashboardLayout>
@@ -136,7 +136,7 @@ export default function ExpensesPage() {
               <Select
                 value={filters.bucketType}
                 onValueChange={(value) =>
-                  setFilters({ ...filters, bucketType: value })
+                  setFilters({ ...filters, bucketType: value || 'All' })
                 }
               >
                 <SelectTrigger>

@@ -130,7 +130,9 @@ export function InsuranceTable({ policies, onViewDetails }: InsuranceTableProps)
                     <div className="flex items-center gap-2">
                       {policy.policyName}
                       {policy.documentUrl && (
-                        <Paperclip className="h-3 w-3 text-muted-foreground" title="Document attached" />
+                        <span title="Document attached">
+                          <Paperclip className="h-3 w-3 text-muted-foreground" />
+                        </span>
                       )}
                     </div>
                   </TableCell>

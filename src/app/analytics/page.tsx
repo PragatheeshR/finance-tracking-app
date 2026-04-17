@@ -227,7 +227,7 @@ export default function AnalyticsPage() {
                 </label>
                 <Select
                   value={selectedMonth.toString()}
-                  onValueChange={(value) => setSelectedMonth(parseInt(value))}
+                  onValueChange={(value) => setSelectedMonth(parseInt(value || '1'))}
                 >
                   <SelectTrigger className="border-2">
                     <SelectValue />
@@ -245,7 +245,7 @@ export default function AnalyticsPage() {
                 <label className="text-sm font-medium mb-2 block">Year</label>
                 <Select
                   value={selectedYear.toString()}
-                  onValueChange={(value) => setSelectedYear(parseInt(value))}
+                  onValueChange={(value) => setSelectedYear(parseInt(value || new Date().getFullYear().toString()))}
                 >
                   <SelectTrigger className="border-2">
                     <SelectValue />
@@ -610,7 +610,7 @@ export default function AnalyticsPage() {
                           cx="50%"
                           cy="50%"
                           labelLine={true}
-                          label={({ name, percentage }) => `${name} (${percentage.toFixed(1)}%)`}
+                          label={({ name, percent }: any) => `${name} (${(percent * 100).toFixed(1)}%)`}
                           outerRadius={120}
                           dataKey="value"
                           animationBegin={0}

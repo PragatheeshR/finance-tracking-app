@@ -36,8 +36,8 @@ import { Loader2 } from 'lucide-react'
 
 const insuranceSchema = z.object({
   policyName: z.string().min(1, 'Policy name is required'),
-  policyType: z.enum(['HEALTH', 'LIFE', 'CAR', 'BIKE', 'OTHER'], {
-    required_error: 'Policy type is required',
+  policyType: z.enum(['HEALTH', 'LIFE', 'CAR', 'BIKE', 'OTHER']).refine((val) => !!val, {
+    message: 'Policy type is required',
   }),
   policyNumber: z.string().optional(),
   validTill: z.string().optional(),
@@ -76,7 +76,7 @@ export function InsuranceDialog({
   const updateInsurance = useUpdateInsurance()
 
   const form = useForm<InsuranceFormData>({
-    resolver: zodResolver(insuranceSchema),
+    resolver: zodResolver(insuranceSchema) as any,
     defaultValues: {
       policyName: '',
       policyType: 'HEALTH',

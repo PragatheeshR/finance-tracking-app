@@ -34,8 +34,8 @@ import { Loader2 } from 'lucide-react'
 
 const incomeSchema = z.object({
   date: z.string().min(1, 'Date is required'),
-  source: z.enum(['SALARY', 'BUSINESS', 'INVESTMENT', 'FREELANCE', 'RENTAL', 'GIFT', 'OTHER'], {
-    required_error: 'Income source is required',
+  source: z.enum(['SALARY', 'BUSINESS', 'INVESTMENT', 'FREELANCE', 'RENTAL', 'GIFT', 'OTHER']).refine((val) => !!val, {
+    message: 'Income source is required',
   }),
   category: z.string().min(1, 'Category is required'),
   description: z.string().min(1, 'Description is required').max(500),
@@ -67,7 +67,7 @@ export function IncomeDialog({ open, onOpenChange, income }: IncomeDialogProps) 
   const updateIncome = useUpdateIncome()
 
   const form = useForm<IncomeFormData>({
-    resolver: zodResolver(incomeSchema),
+    resolver: zodResolver(incomeSchema) as any,
     defaultValues: {
       date: new Date().toISOString().split('T')[0],
       source: 'SALARY',
