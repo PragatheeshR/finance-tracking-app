@@ -1,4 +1,6 @@
 import { NextRequest } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import {
   createExpenseCategorySchema,
@@ -12,14 +14,14 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/utils/api-
  */
 export async function GET(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id')
+    const session = await getServerSession(authOptions)
 
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
+    if (!session?.user?.id) {
+      return errorResponse('Unauthorized', 'UNAUTHORIZED', 401)
     }
 
     const categories = await prisma.expenseCategory.findMany({
-      where: { userId },
+      where: { userId: session.user.id },
       orderBy: { sortOrder: 'asc' },
     })
 
@@ -38,10 +40,10 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id')
+    const session = await getServerSession(authOptions)
 
-    if (!userId) {
-      return errorResponse('User ID is required', 'UNAUTHORIZED', 401)
+    if (!session?.user?.id) {
+      return errorResponse('Unauthorized', 'UNAUTHORIZED', 401)
     }
 
     const body = await request.json()
@@ -53,7 +55,7 @@ export async function POST(request: NextRequest) {
     const existing = await prisma.expenseCategory.findUnique({
       where: {
         userId_name: {
-          userId,
+          userId: session.user.id,
           name: validatedData.name,
         },
       },
@@ -66,7 +68,7 @@ export async function POST(request: NextRequest) {
     // Create category
     const category = await prisma.expenseCategory.create({
       data: {
-        userId,
+        userId: session.user.id,
         name: validatedData.name,
         displayName: validatedData.name,
         icon: validatedData.icon,

@@ -19,14 +19,13 @@ export function useAssetCategories() {
   return useQuery({
     queryKey: ['categories', 'asset'],
     queryFn: async () => {
-      // For now, we'll fetch via a direct API call
-      // This can be optimized later with a dedicated endpoint
       const response = await fetch('/api/v1/categories/asset', {
-        headers: {
-          'x-user-id': 'test-user-001',
-        },
+        credentials: 'include', // Include cookies for session
       })
       const data = await response.json()
+      if (!response.ok || !data.success) {
+        throw new Error(data.error?.message || 'Failed to fetch asset categories')
+      }
       return data.data
     },
     staleTime: 5 * 60 * 1000, // 5 minutes - categories don't change often
@@ -40,21 +39,7 @@ export function useAddExpenseCategory() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: any) => {
-      const response = await fetch('/api/v1/categories/expense', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-id': 'test-user-001',
-        },
-        body: JSON.stringify(data),
-      })
-      const result = await response.json()
-      if (!response.ok || !result.success) {
-        throw new Error(result.error?.message || 'Failed to add category')
-      }
-      return result.data
-    },
+    mutationFn: (data: any) => categoryAPI.addExpenseCategory(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       toast.success('Category added successfully')
@@ -72,21 +57,8 @@ export function useUpdateExpenseCategory() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      const response = await fetch(`/api/v1/categories/expense/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-id': 'test-user-001',
-        },
-        body: JSON.stringify(data),
-      })
-      const result = await response.json()
-      if (!response.ok || !result.success) {
-        throw new Error(result.error?.message || 'Failed to update category')
-      }
-      return result.data
-    },
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      categoryAPI.updateExpenseCategory(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       toast.success('Category updated successfully')
@@ -104,19 +76,7 @@ export function useDeleteExpenseCategory() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`/api/v1/categories/expense/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'x-user-id': 'test-user-001',
-        },
-      })
-      const result = await response.json()
-      if (!response.ok || !result.success) {
-        throw new Error(result.error?.message || 'Failed to delete category')
-      }
-      return result.data
-    },
+    mutationFn: (id: string) => categoryAPI.deleteExpenseCategory(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       toast.success('Category deleted successfully')
