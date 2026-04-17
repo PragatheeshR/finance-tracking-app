@@ -183,7 +183,7 @@ export default function OnboardingPage() {
                 <Select
                   value={formData.currency}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, currency: value })
+                    setFormData({ ...formData, currency: value || 'INR' })
                   }
                 >
                   <SelectTrigger id="currency" className="mt-1">
