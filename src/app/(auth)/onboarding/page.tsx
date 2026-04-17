@@ -202,7 +202,7 @@ export default function OnboardingPage() {
                 <Select
                   value={formData.budgetCycle}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, budgetCycle: value })
+                    setFormData({ ...formData, budgetCycle: value || 'MONTHLY' })
                   }
                 >
                   <SelectTrigger id="budgetCycle" className="mt-1">
@@ -234,7 +234,7 @@ export default function OnboardingPage() {
                 <Select
                   value={formData.primaryGoal}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, primaryGoal: value })
+                    setFormData({ ...formData, primaryGoal: value || 'wealth' })
                   }
                 >
                   <SelectTrigger id="primaryGoal" className="mt-1">
