@@ -29,12 +29,12 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Create default expense categories for new user if they don't exist
-    const existingCategories = await prisma.expenseCategory.count({
+    const existingExpenseCategories = await prisma.expenseCategory.count({
       where: { userId: session.user.id },
     })
 
-    if (existingCategories === 0) {
-      const defaultCategories = [
+    if (existingExpenseCategories === 0) {
+      const defaultExpenseCategories = [
         { name: 'groceries', displayName: 'Groceries', icon: '🛒', color: '#10B981', sortOrder: 1 },
         { name: 'dining', displayName: 'Dining & Food', icon: '🍽️', color: '#F59E0B', sortOrder: 2 },
         { name: 'transport', displayName: 'Transportation', icon: '🚗', color: '#3B82F6', sortOrder: 3 },
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       ]
 
       await prisma.expenseCategory.createMany({
-        data: defaultCategories.map(cat => ({
+        data: defaultExpenseCategories.map(cat => ({
           userId: session.user.id,
           ...cat,
           isDefault: true,
@@ -62,6 +62,9 @@ export async function POST(request: NextRequest) {
         })),
       })
     }
+
+    // Note: Asset categories are global and seeded in prisma/seed.ts
+    // They don't need to be created per-user
 
     // Update or create user settings
     await prisma.userSettings.upsert({
